@@ -8,5 +8,4 @@ node_modules/
 /playwright/.auth/
 package-lock.json
 package.json
-playwright.config.ts
 yarn.lock

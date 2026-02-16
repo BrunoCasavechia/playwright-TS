@@ -1,15 +1,19 @@
-import { test, expect, request } from '@playwright/test';
+import { test, expect, request, APIRequestContext} from '@playwright/test';
 import { TaskModel } from './fixtures/task.model';
+
+// Using the API helper to delete tasks with the same name
+async function deleteTaskByHelper (request: APIRequestContext, taskName: string) {
+  await request.delete('http://localhost:3333/helper/tasks/' + taskName)
+}
 
 test('User should be able to add a new task', async ({ page, request }) => {
 
   const task: TaskModel = {
-    name: 'Writing a new task here',
+    name: 'Writing a new task!',
     is_done: false
   }
 
-  // Using the API helper to delete tasks with the same name
-  await request.delete('http://localhost:3333/helper/tasks/' + task.name)
+  await deleteTaskByHelper(request, task.name)
 
   // GIVEN that the user is on the main page
   await page.goto('http://localhost:8080');
@@ -34,7 +38,7 @@ test.only('It should not allow creating two identical tasks', async ({ page, req
   }
 
   // Using the API helper to delete tasks with the same name
-  await request.delete('http://localhost:3333/helper/tasks/' + task.name)
+ await deleteTaskByHelper(request, task.name)
 
   // Using the API helper to create tasks with the same name
 
